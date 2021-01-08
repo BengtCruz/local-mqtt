@@ -10,3 +10,18 @@
  */
 
 #include <Arduino.h>
+#include <wifi_driver.h>
+#include <PubSubClient.h>
+#include <analogWrite.h>
+
+void callback_mqtt(char *topic, byte *message, unsigned int length);
+
+void reconnect_mqtt();
+
+void setup_mqtt();
+
+bool client_connected();
+
+void mqtt_loop();
+
+void publish(const char *location, char *value);
