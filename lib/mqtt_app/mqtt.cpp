@@ -77,7 +77,7 @@ bool client_connected()
     return client.connected();
 }
 
-void publish(const char *location, char *value)
+void publish(const char *variable, char *value)
 {
-    client.publish(location, value);
+    client.publish(variable, value);
 }
