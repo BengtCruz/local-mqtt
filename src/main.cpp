@@ -9,18 +9,17 @@
  * 
  */
 
-#include <WiFi.h>
+#include "wifi_driver.h"
 #include <PubSubClient.h>
 #include <Wire.h>
 #include <analogWrite.h>
 
 #define VERY_HIGH 100
 
-void setup_wifi();
 void callback(char *topic, byte *message, unsigned int length);
 
-const char *ssid = "Machete";
-const char *password = "locoloco";
+const char *ssid = "LosMamoies";
+const char *password = "VagoVaguito04";
 
 // Add your MQTT Broker IP address, example:
 //const char* mqtt_server = "192.168.1.144";
@@ -43,9 +42,9 @@ void setup_wifi()
     Serial.print("Connecting to ");
     Serial.println(ssid);
 
-    WiFi.begin(ssid, password);
+    wifi_driver_init(ssid, password);
 
-    while (WiFi.status() != WL_CONNECTED)
+    while (wifi_driver_status)
     {
         delay(500);
         Serial.print(".");
@@ -81,7 +80,7 @@ void callback(char *topic, byte *message, unsigned int length)
         if (messageTemp == "on")
         {
             Serial.println("on");
-            analogWrite(BUILTIN_LED, VERY_HIGH);
+            analogWrite(BUILTIN_LED, HIGH);
         }
         else if (messageTemp == "off")
         {
