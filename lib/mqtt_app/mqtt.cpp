@@ -2,14 +2,59 @@
 
 WiFiClient espClient;
 PubSubClient client(espClient);
-const char *mqtt_server = "192.168.43.71";
+const char *mqtt = "192.168.38.105";
+uint16_t port = 1883;
 
-void mqtt_loop()
+const char *ssid = "LosMamoies";
+const char *password = "VagoVaguito04";
+
+void setup_wifi(void)
 {
-    client.loop();
+    delay(10);
+    // We start by connecting to a WiFi network
+    Serial.println();
+    Serial.print("Connecting to ");
+    Serial.println(ssid);
+
+    WiFi.begin(ssid, password);
+
+    while (WiFi.status() != WL_CONNECTED)
+    {
+        delay(500);
+        Serial.print(".");
+    }
+
+    Serial.println("");
+    Serial.println("WiFi connected");
+    Serial.println("IP address: ");
+    Serial.println(WiFi.localIP());
 }
 
-void callback_mqtt(char *topic, byte *message, unsigned int length)
+void reconnect_mqtt()
+{
+    // Loop until we're reconnected
+    while (!client.connected())
+    {
+        Serial.print("Attempting MQTT connection...");
+        // Attempt to connect
+        if (client.connect("ESP32", "bengt", "locoloco"))
+        {
+            Serial.println("connected");
+            // Subscribe
+            client.subscribe("esp32/output");
+        }
+        else
+        {
+            Serial.print("failed, rc=");
+            Serial.print(client.state());
+            Serial.println(" try again in 5 seconds");
+            // Wait 5 seconds before retrying
+            delay(5000);
+        }
+    }
+}
+
+void callback(char *topic, byte *message, unsigned int length)
 {
     Serial.print("Message arrived on topic: ");
     Serial.print(topic);
@@ -33,7 +78,7 @@ void callback_mqtt(char *topic, byte *message, unsigned int length)
         if (messageTemp == "on")
         {
             Serial.println("on");
-            analogWrite(BUILTIN_LED, HIGH);
+            analogWrite(BUILTIN_LED, 1000);
         }
         else if (messageTemp == "off")
         {
@@ -45,33 +90,9 @@ void callback_mqtt(char *topic, byte *message, unsigned int length)
 
 void setup_mqtt()
 {
-    client.setServer(mqtt_server, 1883);
-    client.setCallback(callback_mqtt);
+    client.setServer(mqtt, port);
+    client.setCallback(callback);
 }
-void reconnect_mqtt()
-{
-    // Loop until we're reconnected
-    while (!client.connected())
-    {
-        Serial.print("Attempting MQTT connection...");
-        // Attempt to connect
-        if (client.connect("ESP8266Client"))
-        {
-            Serial.println("connected");
-            // Subscribe
-            client.subscribe("esp32/output");
-        }
-        else
-        {
-            Serial.print("failed, rc=");
-            Serial.print(client.state());
-            Serial.println(" try again in 5 seconds");
-            // Wait 5 seconds before retrying
-            delay(5000);
-        }
-    }
-}
-
 bool client_connected()
 {
     return client.connected();
@@ -80,4 +101,9 @@ bool client_connected()
 void publish(const char *variable, char *value)
 {
     client.publish(variable, value);
+}
+
+void client_loop()
+{
+    client.loop();
 }

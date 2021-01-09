@@ -13,6 +13,7 @@
 #include <wifi_driver.h>
 #include <PubSubClient.h>
 #include <analogWrite.h>
+#include <wifi_driver.h>
 
 /**
  * @brief 
@@ -21,7 +22,7 @@
  * @param message 
  * @param length 
  */
-void callback_mqtt(char *topic, byte *message, unsigned int length);
+void callback(char *topic, byte *message, unsigned int length);
 
 /**
  * @brief 
@@ -47,7 +48,7 @@ bool client_connected();
  * @brief 
  * 
  */
-void mqtt_loop();
+void client_loop();
 
 /**
  * @brief 
@@ -56,3 +57,5 @@ void mqtt_loop();
  * @param value 
  */
 void publish(const char *variable, char *value);
+
+void setup_wifi(void);
