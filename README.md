@@ -14,3 +14,5 @@
 
 * Consists of an ESP32 connected to WiFi and publishing to topics: temperature and humidity. 
 * Subscribes to topic output to turn LED on or off.
+
+Used the help of external websites and sources. Tried to modularize the code for the MQTT connection and initialization. 
