@@ -2,7 +2,7 @@
 
 WiFiClient espClient;
 PubSubClient client(espClient);
-const char *mqtt = "192.168.38.105";
+const char *mqtt = "192.168.38.107";
 uint16_t port = 1883;
 
 const char *ssid = "LosMamoies";

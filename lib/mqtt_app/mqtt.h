@@ -13,6 +13,7 @@
 #include <wifi_driver.h>
 #include <PubSubClient.h>
 #include <analogWrite.h>
+#include <SimpleDHT.h>
 #include <wifi_driver.h>
 
 /**

@@ -15,6 +15,8 @@
  * @brief Constants go here
  */
 long lastMsg = 0;
+int pinDHT11 = 27;
+SimpleDHT11 dht11(pinDHT11);
 char msg[50];
 int value = 0;
 
@@ -52,14 +54,22 @@ void loop()
     {
         lastMsg = now;
 
-        // Temperature in Celsius in Processor in ECU
-        temperature = temperatureRead();
+        int err = dht11.read2(&temperature, &humidity, NULL));
+
+        //Char pointer (strings) for storage.
         char tempString[8];
+        char humdString[8];
+
+        //Temperature print out and publish
         dtostrf(temperature, 1, 2, tempString);
         Serial.print("Temperature: ");
         Serial.println(tempString);
         publish("esp32/temperature", tempString);
 
-        //Humidity yet to be fixed
+        //HUmidity print out and publish
+        dtostrf(humidity, 1, 2, humdString);
+        Serial.print("Humidity: ");
+        Serial.println(humdString);
+        publish("esp32/humidity", humdString);
     }
 }
