@@ -54,7 +54,7 @@ void loop()
     {
         lastMsg = now;
 
-        int err = dht11.read2(&temperature, &humidity, NULL));
+        int err = dht11.read2(&temperature, &humidity, NULL);
 
         //Char pointer (strings) for storage.
         char tempString[8];
